@@ -1,0 +1,97 @@
+// Load Organisation
+LOAD CSV WITH HEADERS FROM 'file:///static/organisation_0_0.csv' AS row fieldterminator '|'
+create (o:Organisation {id:toInteger(row.id), type:row.type, name:row.name, url:row.url});
+
+// Load Place
+LOAD CSV WITH HEADERS FROM 'file:///static/place_0_0.csv' AS row fieldterminator '|'
+create (p:Place {id: toInteger(row.id), name: row.name, url: row.url, type: row.type});
+
+// Load TagClass
+LOAD CSV WITH HEADERS FROM 'file:///static/tagclass_0_0.csv' AS row fieldterminator '|'
+create (tc:TagClass {id: toInteger(row.id), name: row.name, url: row.url});
+
+// Load Tag
+LOAD CSV WITH HEADERS FROM 'file:///static/tag_0_0.csv' AS row fieldterminator '|'
+create (t:Tag {id: toInteger(row.id), name: row.name, url: row.url});
+
+// Load Person
+LOAD CSV WITH HEADERS FROM 'file:///dynamic/person_0_0.csv' AS row fieldterminator '|'
+create (p:Person {id: toInteger(row.id), firstName: row.firstName, lastName: row.lastName, gender: row.gender, birthday: row.birthday, creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, language: row.language, email:row.email
+});
+
+// Load Forum
+LOAD CSV WITH HEADERS FROM 'file:///dynamic/forum_0_0.csv' AS row fieldterminator "|"
+create (f:Forum {id: toInteger(row.id), title: row.title, creationDate: row.creationDate});
+
+// Load Post
+LOAD CSV WITH HEADERS FROM 'file:///dynamic/post_0_0.csv' AS row fieldterminator "|"
+create (p:Post {id: toInteger(row.id), imageFile: case row.imageFile when '' then null else row.imageFile end, creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, language: row.language, content: row.content, length: toInteger(row.length)});
+
+// Load Comment
+LOAD CSV WITH HEADERS FROM 'file:///dynamic/comment_0_0.csv' AS row fieldterminator "|"
+CREATE (c:Comment {id: toInteger(row.id), creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, content: row.content, length: toInteger(row.length)
+});
+
+// Load Forum Person
+LOAD CSV WITH HEADERS FROM 'file:///dynamic/forum_hasMember_person_0_0.csv' AS row fieldterminator "|"
+MATCH (f:Forum {id: toInteger(row.`Forum.id`)})
+MATCH (p:Person {id: toInteger(row.`Person.id`)})
+CREATE (f)-[:hasMember {creationDate: row.joinDate}]->(p)
+
+
+// Load Forum Tag
+LOAD CSV WITH HEADERS FROM 'file:///dynamic/forum_hasTag_tag_0_0.csv' AS row fieldterminator "|"
+MATCH (f:Forum {id: toInteger(row.`Forum.id`)})
+MATCH (t:Tag {id: toInteger(row.`Tag.id`)})
+CREATE (f)-[:hasTag]->(t);
+
+//Did not run
+
+// Load Post Tag
+LOAD CSV WITH HEADERS FROM 'file:///dynamic/post_hasTag_tag_0_0.csv' AS row fieldterminator "|"
+MATCH (p:Post {id: toInteger(row.`Post.id`)})
+MATCH (t:Tag {id: toInteger(row.`Tag.id`)})
+MERGE (p)-[:hasTag]->(t);
+
+// Load Comment Tag
+LOAD CSV WITH HEADERS FROM 'file:///dynamic/comment_hasTag_tag_0_0.csv' AS row fieldterminator "|"
+MATCH (c:Comment {id: toInteger(row.`Comment.id`)})
+MATCH (t:Tag {id: toInteger(row.`Tag.id`)})
+MERGE (c)-[:hasTag]->(t);
+
+// Load Likes (Post)
+LOAD CSV WITH HEADERS FROM 'file:///dynamic/person_likes_post_0_0.csv' AS row fieldterminator "|"
+MATCH (p:Person {id: toInteger(row.`Person.id`)})
+MATCH (post:Post {id: toInteger(row.`Post.id`)})
+MERGE (p)-[:LIKES {creationDate: row.creationDate}]->(post);
+
+// Load Likes (Comment)
+LOAD CSV WITH HEADERS FROM 'file:///dynamic/person_likes_comment_0_0.csv' AS row fieldterminator "|"
+MATCH (p:Person {id: toInteger(row.`Person.id`)})
+MATCH (c:Comment {id: toInteger(row.`Comment.id`)})
+MERGE (p)-[:LIKES {creationDate: row.creationDate}]->(c);
+
+
+// Load Knows
+LOAD CSV WITH HEADERS FROM 'file:///dynamic/person_knows_person_0_0.csv' AS row fieldterminator "|"
+MATCH (p1:Person {id: toInteger(row.`Person.id`)})
+MATCH (p2:Person {id: toInteger(row.`Person.id`)})
+MERGE (p1)-[:KNOWS {creationDate: row.creationDate}]->(p2);
+
+// Load Person Tag
+LOAD CSV WITH HEADERS FROM 'file:///dynamic/person_hasInterest_tag_0_0.csv' AS row fieldterminator "|"
+MATCH (p:Person {id: toInteger(row.`Person.id`)})
+MATCH (t:Tag {id: toInteger(row.`Tag.id`)})
+MERGE (p)-[:hasInterest]->(t);
+
+// Load Person University
+LOAD CSV WITH HEADERS FROM 'file:///dynamic/person_studyAt_organisation_0_0.csv' AS row fieldterminator "|"
+MATCH (p:Person {id: toInteger(row.`Person.id`)})
+MATCH (o:Organisation {id: toInteger(row.`Organisation.id`)})
+MERGE (p)-[:studyAt {classYear: toInteger(row.classYear)}]->(o);
+
+// Load Person Company
+LOAD CSV WITH HEADERS FROM 'file:///dynamic/person_workAt_organisation_0_0.csv' AS row fieldterminator "|"
+MATCH (p:Person {id: toInteger(row.`Person.id`)})
+MATCH (o:Organisation {id: toInteger(row.`Organisation.id`)})
+MERGE (p)-[:workAt {workFrom: toInteger(row.workFrom)}]->(o);
