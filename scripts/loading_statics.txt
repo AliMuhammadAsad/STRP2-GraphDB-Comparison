@@ -1,0 +1,101 @@
+// ----------------------------- Static Files via APOC (is slower for Nodes for some reason) ------------------------------------------
+// Load Organisation
+call apoc.periodic.iterate(
+'load csv with headers from "file:///static/organisation_0_0.csv" as row fieldterminator "|" return row',
+'create (o:Organisation {id:toInteger(row.id), type:row.type, name:row.name, url:row.url})',
+{batchSize:1000, iterateList:true}
+);
+
+// Load Place
+call apoc.periodic.iterate(
+'load csv with headers from "file:///static/place_0_0.csv" as row fieldterminator "|" return row',
+'create (p:Place {id: toInteger(row.id), name: row.name, url: row.url, type: row.type})',
+{batchSize:1000, iterateList:true}
+);
+
+// Load TagClass
+call apoc.periodic.iterate(
+'load csv with headers from "file:///static/tagclass_0_0.csv" AS row fieldterminator "|" return row',
+'create (tc:TagClass {id: toInteger(row.id), name: row.name, url: row.url})',
+{batchSize:1000, iterateList:true}
+);
+
+// Load Tag
+call apoc.periodic.iterate(
+'load csv with headers from "file:///static/tag_0_0.csv" AS row fieldterminator "|" return row',
+'create (t:Tag {id: toInteger(row.id), name: row.name, url: row.url})',
+{batchSize:1000, iterateList:true}
+);
+
+//  -------------------------------------------Relationships in Static -> faster via apoc
+// Organisation Located In Place
+call apoc.periodic.iterate(
+'load csv with headers from "file:///static///organisation_isLocatedIn_place_0_0.csv" as row fieldterminator "|" return row',
+'match (o:Organisation {id: toInteger(row.`Organisation.id`)}), (p:Place {id: toInteger(row.`Place.id`)})
+create (o)-[:isLocatedIn]->(p)',
+{batchSize:1000, iterateList:true}
+);
+
+// Place is part of Place
+call apoc.periodic.iterate(
+'load csv with headers from "file:///static/place_isPartOf_place_0_0.csv" as row fieldterminator "|" return row',
+'match (p1:Place {id: toInteger(row.`Place1.id`)}), (p2:Place {id: toInteger(row.`Place2.id`)})
+create (p1)-[:isPartOf]->(p2)',
+{batchSize:1000, iterateList:true}
+);
+
+// Tag has type TagClass
+call apoc.periodic.iterate(
+'load csv with headers from "file:///static/tag_hasType_tagclass_0_0.csv" as row fieldterminator "|" return row',
+'match (t:Tag {id: toInteger(row.`Tag.id`)}), (tc:TagClass {id: toInteger(row.`TagClass.id`)})
+create (t)-[:hasType]->(tc)',
+{batchSize:1000, iterateList:true}
+);
+
+// TagClass is Subclass of TagClass
+call apoc.periodic.iterate(
+'load csv with headers from "file:///static/tagclass_isSubclassOf_tagclass_0_0.csv" as row fieldterminator "|" return row',
+'match (tc1:TagClass {id: toInteger(row.`TagClass1.id`)}), (tc2:TagClass {id: toInteger(row.`TagClass2.id`)})
+create (tc1)-[:isSubclassOf]->(tc2)',
+{batchSize:1000, iterateList:true}
+);
+
+
+// -------------------------------------------------------------------------------------------------- //
+// ----------------------------- Static Files without APOC ------------------------------------------
+// Load Organisation
+load csv with headers from 'file:///static/organisation_0_0.csv' AS row fieldterminator '|'
+create (o:Organisation {id:toInteger(row.id), type:row.type, name:row.name, url:row.url});
+
+// Load Place
+load csv with headers from 'file:///static/place_0_0.csv' AS row fieldterminator '|'
+create (p:Place {id: toInteger(row.id), name: row.name, url: row.url, type: row.type});
+
+// Load TagClass
+load csv with headers from 'file:///static/tagclass_0_0.csv' AS row fieldterminator '|'
+create (tc:TagClass {id: toInteger(row.id), name: row.name, url: row.url});
+
+// Load Tag
+load csv with headers from 'file:///static/tag_0_0.csv' AS row fieldterminator '|'
+create (t:Tag {id: toInteger(row.id), name: row.name, url: row.url});
+
+//  ---------------------------------------------Relationships in Static
+// Organisation is located in
+load csv with headers from "file:///static/organisation_isLocatedIn_place_0_0.csv" as row fieldterminator "|"
+match (o:Organisation {id: toInteger(row.`Organisation.id`)}), (p:Place {id: toInteger(row.`Place.id`)})
+create (o)-[:isLocatedIn]->(p);
+
+// Place is Part of Place
+load csv with headers from "file:///static/place_isPartOf_place_0_0.csv" as row fieldterminator "|"
+match (p1:Place {id: toInteger(row.`Place1.id`)}), (p2:Place {id: toInteger(row.`Place2.id`)})
+create (p1)-[:isPartOf]->(p2);
+
+// Tag has type TagClass
+load csv with headers from "file:///static/tag_hasType_tagclass_0_0.csv" as row fieldterminator "|"
+match (t:Tag {id: toInteger(row.`Tag.id`)}), (tc:TagClass {id: toInteger(row.`TagClass.id`)})
+create (t)-[:hasType]->(tc);
+
+// TagClass is SubClass of TagClass
+load csv with headers from "file:///static/tagclass_isSubclassOf_tagclass_0_0.csv" as row fieldterminator "|" 
+match (tc1:TagClass {id: toInteger(row.`TagClass1.id`)}), (tc2:TagClass {id: toInteger(row.`TagClass2.id`)})
+create (tc1)-[:isSubclassOf]->(tc2);
