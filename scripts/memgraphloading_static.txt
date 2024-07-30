@@ -23,4 +23,8 @@ load csv from "/usr/lib/memgraph/tag_hasType_tagclass_0_0.csv" WITH HEADER DELIM
 match (t:Tag {id: toInteger(row.`Tag.id`)}), (tc:TagClass {id: toInteger(row.`TagClass.id`)})
 create (t)-[:hasType]->(tc);
 
+load csv from "usr/lib/memgraph/tagclass_isSubclassOf_tagclass_0_0.csv" WITH HEADER DELIMITER '|' as row 
+match (tc1:TagClass {id: toInteger(row.`TagClass1.id`)}), (tc2:TagClass {id: toInteger(row.`TagClass2.id`)})
+create (tc1)-[:isSubclassOf]->(tc2);
+
 
