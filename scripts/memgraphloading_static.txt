@@ -7,4 +7,6 @@ CREATE (p:Place {id: toInteger(row.id), name: row.name, url: row.url, type: row.
 LOAD CSV FROM '/usr/lib/memgraph/tagclass_0_0.csv' WITH HEADER DELIMITER '|' AS row
 CREATE (tc:TagClass {id: toInteger(row.id), name: row.name, url: row.url});
 
+LOAD CSV FROM '/usr/lib/memgraph/tag_0_0.csv' WITH HEADER DELIMITER '|' AS row
+CREATE (t:Tag {id: toInteger(row.id), name: row.name, url: row.url});
 
