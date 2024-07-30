@@ -1,0 +1,2 @@
+LOAD CSV FROM '/usr/lib/memgraph/organisation_0_0.csv' WITH HEADER DELIMITER '|' AS row
+CREATE (o:Organisation {id: toInteger(row.id), type: row.type, name: row.name, url: row.url});
