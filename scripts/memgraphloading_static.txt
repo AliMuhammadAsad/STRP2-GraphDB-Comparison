@@ -1,2 +1,10 @@
 LOAD CSV FROM '/usr/lib/memgraph/organisation_0_0.csv' WITH HEADER DELIMITER '|' AS row
 CREATE (o:Organisation {id: toInteger(row.id), type: row.type, name: row.name, url: row.url});
+
+LOAD CSV FROM '/usr/lib/memgraph/place_0_0.csv' WITH HEADER DELIMITER '|' AS row
+CREATE (p:Place {id: toInteger(row.id), name: row.name, url: row.url, type: row.type});
+
+LOAD CSV FROM '/usr/lib/memgraph/tagclass_0_0.csv' WITH HEADER DELIMITER '|' AS row
+CREATE (tc:TagClass {id: toInteger(row.id), name: row.name, url: row.url});
+
+
