@@ -15,3 +15,104 @@ create (p:Post {id: toInteger(row.id), imageFile: case row.imageFile when '' the
 load csv from '/usr/lib/memgraph/comment_0_0.csv' WITH HEADER DELIMITER '|' AS row
 create (c:Comment {id: toInteger(row.id), creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, content: row.content, length: toInteger(row.length)
 });
+
+--------------------------------------------------Relationships---------------------------------------------------------------
+
+
+// Load Forum has Member Person
+load csv from '/usr/lib/memgraph/forum_hasMember_person_0_0.csv' WITH HEADER DELIMITER '|' as row
+match (f:Forum {id: toInteger(row.`Forum.id`)}), (p:Person {id: toInteger(row.`Person.id`)})
+create (f)-[:hasMember {creationDate: row.joinDate}]->(p);
+
+// Load Forum has Moderator Person
+load csv from '/usr/lib/memgraph/forum_hasModerator_person_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (f:Forum {id: toInteger(row.`Forum.id`)}), (p:Person {id: toInteger(row.`Person.id`)})
+create (f)-[:hasModerator]->(p);
+
+
+// Load Forum has Tag
+load csv from '/usr/lib/memgraph/forum_hasTag_tag_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (f:Forum {id: toInteger(row.`Forum.id`)}), (t:Tag {id: toInteger(row.`Tag.id`)})
+create (f)-[:hasTag]->(t);
+
+// Load Forum container of Post
+load csv from '/usr/lib/memgraph/forum_containerOf_post_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (f:Forum {id: toInteger(row.`Forum.id`)}), (p:Post {id: toInteger(row.`Post.id`)})
+create (f)-[:containerOf]->(p);
+
+// Load Post has Tag
+load csv from '/usr/lib/memgraph/post_hasTag_tag_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (p:Post {id: toInteger(row.`Post.id`)}), (t:Tag {id: toInteger(row.`Tag.id`)})
+create (p)-[:hasTag]->(t);
+
+// Load Post is located in Place
+load csv from '/usr/lib/memgraph/post_isLocatedIn_place_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (p:Post {id: toInteger(row.`Post.id`)}), (pl:Place {id: toInteger(row.`Place.id`)})
+create (p)-[:isLocatedIn]->(pl);
+
+// Load Post has Creator Person
+load csv from '/usr/lib/memgraph/post_hasCreator_person_0_0.csv' WITH HEADER DELIMITER '|' as row
+match (p:Post {id: toInteger(row.`Post.id`)}), (pe:Person {id: toInteger(row.`Person.id`)})
+create (p)-[:hasCreator]->(pe);
+
+
+// Load Comment has Tag
+load csv from '/usr/lib/memgraph/comment_hasTag_tag_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (c:Comment {id: toInteger(row.`Comment.id`)}), (t:Tag {id: toInteger(row.`Tag.id`)})
+create (c)-[:hasTag]->(t);
+
+// Load Comment is located in Place
+load csv from '/usr/lib/memgraph/comment_isLocatedIn_place_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (c:Comment {id: toInteger(row.`Comment.id`)}), (p:Place {id: toInteger(row.`Place.id`)})
+create (c)-[:isLocatedIn]->(p);
+
+// Load Comment is Reply of Comment
+load csv from '/usr/lib/memgraph/comment_replyOf_comment_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (c1:Comment {id: toInteger(row.`Comment1.id`)}), (c2:Comment {id: toInteger(row.`Comment2.id`)})
+create (c1)-[:replyOf]->(c2);
+
+// Load Comment is Reply of Post
+load csv from '/usr/lib/memgraph/comment_replyOf_post_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (c:Comment {id: toInteger(row.`Comment.id`)}), (p:Post {id: toInteger(row.`Post.id`)})
+create (c)-[:replyOfPost]->(p);
+
+// Load Comment has creator Person
+load csv from '/usr/lib/memgraph/comment_hasCreator_person_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (c:Comment {id: toInteger(row.`Comment.id`)}), (p:Person {id: toInteger(row.`Person.id`)})
+create (c)-[:hasCreator]->(p);
+
+// Load Person Likes (Post)
+load csv from '/usr/lib/memgraph/person_likes_post_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (p:Person {id: toInteger(row.`Person.id`)}), (post:Post {id: toInteger(row.`Post.id`)})
+create (p)-[:likes {creationDate: row.creationDate}]->(post);
+
+// Load Person Likes (Comment)
+load csv from '/usr/lib/memgraph/person_likes_comment_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (p:Person {id: toInteger(row.`Person.id`)}), (c:Comment {id: toInteger(row.`Comment.id`)})
+create (p)-[:likes {creationDate: row.creationDate}]->(c);
+
+
+// Load Person Knows Person
+load csv from '/usr/lib/memgraph/person_knows_person_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (p1:Person {id: toInteger(row.`Person1.id`)}), (p2:Person {id: toInteger(row.`Person2.id`)})
+create (p1)-[:knows {creationDate: row.creationDate}]->(p2);
+
+// Load Person has interest Tag
+load csv from '/usr/lib/memgraph/person_hasInterest_tag_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (p:Person {id: toInteger(row.`Person.id`)}), (t:Tag {id: toInteger(row.`Tag.id`)})
+create (p)-[:hasInterest]->(t);
+
+// Load Person study at University
+load csv from '/usr/lib/memgraph/person_studyAt_organisation_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)})
+create (p)-[:studyAt {classYear: toInteger(row.classYear)}]->(o);
+
+// Load Person works at Company
+load csv from '/usr/lib/memgraph/person_workAt_organisation_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)})
+create (p)-[:workAt {workFrom: toInteger(row.workFrom)}]->(o);
+
+// Load Person is Located in Place
+load csv from '/usr/lib/memgraph/person_isLocatedIn_place_0_0.csv'  WITH HEADER DELIMITER '|' as row
+match (p:Person {id: toInteger(row.`Person.id`)}), (pl:Place {id: toInteger(row.`Place.id`)})
+create (p)-[:isLocatedIn]->(pl);
