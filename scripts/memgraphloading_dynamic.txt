@@ -1,0 +1,17 @@
+// Load Person
+load csv from '/usr/lib/memgraph/person_0_0.csv' WITH HEADER DELIMITER '|' AS row
+create (p:Person {id: toInteger(row.id), firstName: row.firstName, lastName: row.lastName, gender: row.gender, birthday: row.birthday, creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, language: row.language, email:row.email
+});
+
+// Load Forum
+load csv from '/usr/lib/memgraph/forum_0_0.csv' WITH HEADER DELIMITER '|' AS row
+create (f:Forum {id: toInteger(row.id), title: row.title, creationDate: row.creationDate});
+
+// Load Post
+load csv from '/usr/lib/memgraph/post_0_0.csv' WITH HEADER DELIMITER '|' AS row
+create (p:Post {id: toInteger(row.id), imageFile: case row.imageFile when '' then null else row.imageFile end, creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, language: row.language, content: row.content, length: toInteger(row.length)});
+
+// Load Comment
+load csv from '/usr/lib/memgraph/comment_0_0.csv' WITH HEADER DELIMITER '|' AS row
+create (c:Comment {id: toInteger(row.id), creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, content: row.content, length: toInteger(row.length)
+});
