@@ -1,0 +1,30 @@
+LOAD CSV FROM '/usr/lib/memgraph/organisation_0_0.csv' WITH HEADER DELIMITER '|' AS row
+CREATE (o:Organisation {id: toInteger(row.id), type: row.type, name: row.name, url: row.url});
+
+LOAD CSV FROM '/usr/lib/memgraph/place_0_0.csv' WITH HEADER DELIMITER '|' AS row
+CREATE (p:Place {id: toInteger(row.id), name: row.name, url: row.url, type: row.type});
+
+LOAD CSV FROM '/usr/lib/memgraph/tagclass_0_0.csv' WITH HEADER DELIMITER '|' AS row
+CREATE (tc:TagClass {id: toInteger(row.id), name: row.name, url: row.url});
+
+LOAD CSV FROM '/usr/lib/memgraph/tag_0_0.csv' WITH HEADER DELIMITER '|' AS row
+CREATE (t:Tag {id: toInteger(row.id), name: row.name, url: row.url});
+
+
+load csv from "usr/lib/memgraph/organisation_isLocatedIn_place_0_0.csv" WITH HEADER DELIMITER '|' AS row
+match (o:Organisation {id: toInteger(row.`Organisation.id`)}), (p:Place {id: toInteger(row.`Place.id`)})
+create (o)-[:isLocatedIn]->(p);
+
+load csv from "usr/lib/memgraph/place_isPartOf_place_0_0.csv" WITH HEADER DELIMITER '|' AS row
+match (p1:Place {id: toInteger(row.`Place1.id`)}), (p2:Place {id: toInteger(row.`Place2.id`)})
+create (p1)-[:isPartOf]->(p2);
+
+load csv from "/usr/lib/memgraph/tag_hasType_tagclass_0_0.csv" WITH HEADER DELIMITER '|' AS row
+match (t:Tag {id: toInteger(row.`Tag.id`)}), (tc:TagClass {id: toInteger(row.`TagClass.id`)})
+create (t)-[:hasType]->(tc);
+
+load csv from "usr/lib/memgraph/tagclass_isSubclassOf_tagclass_0_0.csv" WITH HEADER DELIMITER '|' as row 
+match (tc1:TagClass {id: toInteger(row.`TagClass1.id`)}), (tc2:TagClass {id: toInteger(row.`TagClass2.id`)})
+create (tc1)-[:isSubclassOf]->(tc2);
+
+
