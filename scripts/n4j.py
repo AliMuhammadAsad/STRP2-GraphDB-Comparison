@@ -35,15 +35,10 @@ indexes =[
 'CREATE INDEX FOR (post:Post) ON (post.id);',
 'CREATE INDEX FOR (c:Comment) ON (c.id);'
 ]
-drop_indexes = [
-  'DROP INDEX index_organisation_id IF EXISTS;',
-  'DROP INDEX index_place_id IF EXISTS;',
-  'DROP INDEX index_tagclass_id IF EXISTS;',
-  'DROP INDEX index_tag_id IF EXISTS;',
-  'DROP INDEX index_person_id IF EXISTS;',
-  'DROP INDEX index_forum_id IF EXISTS;',
-  'DROP INDEX index_post_id IF EXISTS;',
-  'DROP INDEX index_comment_id IF EXISTS;'
+drop_all = [
+  '''call apoc.periodic.iterate('match (n) return n', 'detach delete n', {batchSize:10000, iterateList:true})''',
+  '''call apoc.schema.assert({}, {});''',
+  '''call apoc.schema.assert({}, {})'''
 ]
 
 queries = {
@@ -134,7 +129,6 @@ load_dynamic_nodes = {
   {batchSize: 1000, iterateList: true}
 );'''
 }
-
 load_dynamic_relationships = {
     "Forum has member Person": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/forum_hasMember_person_0_0.csv" as row fieldterminator "|" return row', 'match (f:Forum {id: toInteger(row.`Forum.id`)}), (p:Person {id: toInteger(row.`Person.id`)}) create (f)-[:hasMember {creationDate: row.joinDate}]->(p)', {batchSize: 1000, iterateList: true} );''',
     "Forum has moderator Person": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/forum_hasModerator_person_0_0.csv" as row fieldterminator "|" return row', 'match (f:Forum {id: toInteger(row.`Forum.id`)}), (p:Person {id: toInteger(row.`Person.id`)}) create (f)-[:hasModerator]->(p)', {batchSize: 1000, iterateList: true} );''',
@@ -157,10 +151,13 @@ load_dynamic_relationships = {
     "Person is Located In Place": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_isLocatedIn_place_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (pl:Place {id: toInteger(row.`Place.id`)}) create (p)-[:isLocatedIn]->(pl)', {batchSize: 1000, iterateList: true} );'''
 }
 
+print("#------------------------------------------------------------------#")
+print("#---------------- Individual Query Execution Time -----------------#")
+print("#------------------------------------------------------------------#")
 total_time = 0
 with driver.session() as session:
-    # rq(indexes)
-    # Timing Loading Complete Dataset using APOC
+    rq(drop_all)
+    rq(indexes)
     for q_name, q in queries.items():
         start_time = time.time()
         session.run(q)
@@ -168,12 +165,17 @@ with driver.session() as session:
         print(f"Time taken to load {q_name}: {(end_time - start_time) * 1000:.2f} ms")
         total_time += end_time - start_time
 
+print("\n")
+print("#------------------------------------------------------------------#")
+print("#------------------------ Total Execution Time --------------------#")
+print("#------------------------------------------------------------------#")
 # Printing time in milliseconds:
 print(f"Time taken to load dataset: {(total_time) * 1000:.2f} ms")
 # Printing time in seconds:
 print(f"Time taken to load dataset: {total_time:.2f} s")
 # Printing time in hours:
 print(f"Time taken to load dataset: {(total_time) / 3600:.2f} h")
+print("#------------------------------------------------------------------#")
 
 
 driver.close()
