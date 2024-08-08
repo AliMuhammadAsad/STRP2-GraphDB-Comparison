@@ -1,0 +1,43 @@
+#------------------------------------------------------------------#
+#---------------- Individual Query Execution Time -----------------#
+#------------------------------------------------------------------#
+Time taken to load Load Organisation: 77.43 ms
+Time taken to load Load Place: 651.27 ms
+Time taken to load Load TagClass: 129.62 ms
+Time taken to load Load Tag: 84.72 ms
+Time taken to load Organisation Located In Place: 556.53 ms
+Time taken to load Place is part of Place: 558.21 ms
+Time taken to load Tag has type TagClass: 149.28 ms
+Time taken to load TagClass is Subclass of TagClass: 555.38 ms
+Time taken to load Load Person: 121.39 ms
+Time taken to load Load Forum: 240.43 ms
+Time taken to load Load Post: 623.96 ms
+Time taken to load Load Comment: 7320.92 ms
+Time taken to load Forum has member Person: 10477.19 ms
+Time taken to load Forum has moderator Person: 8092.75 ms
+Time taken to load Forum has Tag: 704.86 ms
+Time taken to load Forum container of Post: 2239.53 ms
+Time taken to load Post has Tag: 5739.17 ms
+Time taken to load Post is located in Place: 3923.96 ms
+Time taken to load Post has Creator Person: 5688.14 ms
+Time taken to load Comment has Tag: 5822.07 ms
+Time taken to load Comment is located in Place: 14581.02 ms
+Time taken to load Comment is reply of Comment: 9053.23 ms
+Time taken to load Comment is reply of Post: 5070.23 ms
+Time taken to load Comment has Creator Person: 4913.87 ms
+Time taken to load Person Likes (Post): 10372.52 ms
+Time taken to load Person Likes (Comment): 3857.56 ms
+Time taken to load Person Knows Person: 6217.53 ms
+Time taken to load Person has Interest Tag: 1036.58 ms
+Time taken to load Person study at University: 1679.04 ms
+Time taken to load Person Company: 144.01 ms
+Time taken to load Person is Located In Place: 247.00 ms
+
+
+#------------------------------------------------------------------#
+#------------------------ Total Execution Time --------------------#
+#------------------------------------------------------------------#
+Time taken to load dataset: 110929.39 ms
+Time taken to load dataset: 110.93 s
+Time taken to load dataset: 0.03 h
+#------------------------------------------------------------------#

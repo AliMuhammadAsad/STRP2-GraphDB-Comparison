@@ -1,4 +1,0 @@
-SF0.1:
-Time taken to load dataset: 56526289.98 ms
-Time taken to load dataset: 56526.29 s
-Time taken to load dataset: 15.70 h

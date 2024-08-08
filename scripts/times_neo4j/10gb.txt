@@ -1,0 +1,87 @@
+#------------------------------------------------------------------#
+#---------------- Individual Query Execution Time -----------------#
+#------------------------------------------------------------------#
+Time taken to load Load Organisation: 105.49 ms
+Time taken to load Load Place: 704.93 ms
+Time taken to load Load TagClass: 148.09 ms
+Time taken to load Load Tag: 88.38 ms
+Time taken to load Organisation Located In Place: 571.56 ms
+Time taken to load Place is part of Place: 562.59 ms
+Time taken to load Tag has type TagClass: 144.30 ms
+Time taken to load TagClass is Subclass of TagClass: 533.99 ms
+Time taken to load Load Person: 122.46 ms
+Time taken to load Load Forum: 905.84 ms
+Time taken to load Load Post: 3522.09 ms
+Time taken to load Load Comment: 55123.40 ms
+Time taken to load Forum has member Person: 120660.48 ms
+Time taken to load Forum has moderator Person: 100265.61 ms
+Time taken to load Forum has Tag: 4098.94 ms
+Time taken to load Forum container of Post: 15214.56 ms
+Time taken to load Post has Tag: 44366.55 ms
+Time taken to load Post is located in Place: 42949.06 ms
+Time taken to load Post has Creator Person: 43054.84 ms
+Time taken to load Comment has Tag: 43844.15 ms
+Time taken to load Comment is located in Place: 166242.42 ms
+Time taken to load Comment is reply of Comment: 106579.50 ms
+Time taken to load Comment is reply of Post: 58072.60 ms
+Time taken to load Comment has Creator Person: 57828.84 ms
+Time taken to load Person Likes (Post): 126951.26 ms
+Time taken to load Person Likes (Comment): 53877.36 ms
+Time taken to load Person Knows Person: 110564.89 ms
+Time taken to load Person has Interest Tag: 13641.87 ms
+Time taken to load Person study at University: 11816.66 ms
+Time taken to load Person Company: 554.68 ms
+Time taken to load Person is Located In Place: 1193.16 ms
+
+
+#------------------------------------------------------------------#
+#------------------------ Total Execution Time --------------------#
+#------------------------------------------------------------------#
+Time taken to load dataset: 1184310.54 ms
+Time taken to load dataset: 1184.31 s
+Time taken to load dataset: 0.33 h
+#------------------------------------------------------------------#
+am07127@administrator-MS-7B17:~/Desktop/strp2/STRP2-GraphDB-Comparison/scripts$ python n4j.py 
+#------------------------------------------------------------------#
+#---------------- Individual Query Execution Time -----------------#
+#------------------------------------------------------------------#
+Time taken to load Load Organisation: 69.59 ms
+Time taken to load Load Place: 688.89 ms
+Time taken to load Load TagClass: 152.96 ms
+Time taken to load Load Tag: 109.49 ms
+Time taken to load Organisation Located In Place: 587.72 ms
+Time taken to load Place is part of Place: 578.10 ms
+Time taken to load Tag has type TagClass: 157.60 ms
+Time taken to load TagClass is Subclass of TagClass: 568.71 ms
+Time taken to load Load Person: 126.56 ms
+Time taken to load Load Forum: 2090.21 ms
+Time taken to load Load Post: 9329.54 ms
+Time taken to load Load Comment: 153813.50 ms
+Time taken to load Forum has member Person: 408162.79 ms
+Time taken to load Forum has moderator Person: 355350.51 ms
+Time taken to load Forum has Tag: 11537.49 ms
+Time taken to load Forum container of Post: 40815.56 ms
+Time taken to load Post has Tag: 131603.38 ms
+Time taken to load Post is located in Place: 154389.67 ms
+Time taken to load Post has Creator Person: 129231.44 ms
+Time taken to load Comment has Tag: 133159.43 ms
+Time taken to load Comment is located in Place: 552110.20 ms
+Time taken to load Comment is reply of Comment: 373745.98 ms
+Time taken to load Comment is reply of Post: 204178.86 ms
+Time taken to load Comment has Creator Person: 203693.69 ms
+Time taken to load Person Likes (Post): 451643.26 ms
+Time taken to load Person Likes (Comment): 202372.55 ms
+Time taken to load Person Knows Person: 435498.83 ms
+Time taken to load Person has Interest Tag: 37720.07 ms
+Time taken to load Person study at University: 30780.30 ms
+Time taken to load Person Company: 1418.42 ms
+Time taken to load Person is Located In Place: 3413.16 ms
+
+
+#------------------------------------------------------------------#
+#------------------------ Total Execution Time --------------------#
+#------------------------------------------------------------------#
+Time taken to load dataset: 4029098.47 ms
+Time taken to load dataset: 4029.10 s
+Time taken to load dataset: 1.12 h
+#------------------------------------------------------------------#
