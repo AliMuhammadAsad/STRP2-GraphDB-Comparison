@@ -114,8 +114,9 @@ queries_without_apoc = {
     "Person study at University": '''LOAD CSV WITH HEADERS FROM "file:///dynamic/person_studyAt_organisation_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)}) CREATE (p)-[:studyAt {classYear: toInteger(row.classYear)}]->(o);''',
     "Person works at Company": '''LOAD CSV WITH HEADERS FROM "file:///dynamic/person_workAt_organisation_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)}) CREATE (p)-[:workAt {workFrom: toInteger(row.workFrom)}]->(o);''',
     "Person is Located In Place": '''LOAD CSV WITH HEADERS FROM "file:///dynamic/person_isLocatedIn_place_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p:Person {id: toInteger(row.`Person.id`)}), (pl:Place {id: toInteger(row.`Place.id`)}) CREATE (p)-[:isLocatedIn]->(pl);''',
-    "Set Post as Message": '''match (p:Post) set p:Message''',
-    "Set Comment as Message": '''match (c:Comment) set c:Message'''
+    # "Set Post as Message": '''match (p:Post) set p:Message''',
+    # "Set Comment as Message": '''match (c:Comment) set c:Message'''
+    "Set Post and Comment as Message": '''match (n) where n:Post or n:Comment set n:Message'''
 }
 
 print("#------------------------------------------------------------------#")
