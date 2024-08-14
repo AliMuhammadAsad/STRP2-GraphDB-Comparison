@@ -1,0 +1,27 @@
+// Add a Person node, connected to the network by 4 possible edge types.
+
+MATCH (c:Place {id: $placeId})
+CREATE (p:Person {
+    id: $personId,
+    firstName: $personFirstName,
+    lastName: $personLastName,
+    gender: $gender,
+    birthday: $birthday,
+    creationDate: $creationDate,
+    locationIP: $locationIP,
+    browserUsed: $browserUsed,
+    languages: $languages,
+    email: $emails
+  })-[:isLocatedIn]->(c)
+WITH p, count(*) AS dummy1
+UNWIND $tagIds AS tagId
+  MATCH (t:Tag {id: tagId})
+  CREATE (p)-[:hasInterest]->(t)
+WITH p, count(*) AS dummy2
+UNWIND $studyAt AS s
+  MATCH (u:Organisation {id: s[0]})
+  CREATE (p)-[:studyAt {classYear: s[1]}]->(u)
+WITH p, count(*) AS dummy3
+UNWIND $workAt AS w
+  MATCH (comp:Organisation {id: w[0]})
+  CREATE (p)-[:workAt {workFrom: w[1]}]->(comp)

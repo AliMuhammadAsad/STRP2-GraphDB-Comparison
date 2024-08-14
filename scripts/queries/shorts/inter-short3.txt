@@ -1,0 +1,15 @@
+// Given a start Person with ID $personId, retrieve all of their friends, and the date at which they became friends.
+
+
+/*
+:param personId: 10995116277794
+*/
+MATCH (n:Person {id: $personId })-[r:knows]-(friend)
+RETURN
+    friend.id AS personId,
+    friend.firstName AS firstName,
+    friend.lastName AS lastName,
+    r.creationDate AS friendshipCreationDate
+ORDER BY
+    friendshipCreationDate DESC,
+    toInteger(personId) ASC
