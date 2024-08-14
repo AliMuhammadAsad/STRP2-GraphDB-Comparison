@@ -1,0 +1,8 @@
+// Add a likes edge to a Post.
+
+personId: 43985348834100
+postId: 1030792154060
+creationDate: 1612137600000
+
+MATCH (person:Person {id: $personId}), (post:Post {id: $postId})
+CREATE (person)-[:likes {creationDate: $creationDate}]->(post)

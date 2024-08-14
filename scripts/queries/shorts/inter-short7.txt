@@ -1,18 +1,11 @@
 // Given a Message with ID $messageId, retrieve the (1-hop) Comments that reply to it. In addition, return a boolean flag knows indicating if the author of the reply (replyAuthor) knows the author of the original message (messageAuthor). If author is same as original author, return False for knows flag
 
 /*
-:param messageId: 206158432794
+:param messageId => 412317002578
 */
 MATCH (m:Message {id: $messageId })<-[:replyOf]-(c:Comment)-[:hasCreator]->(p:Person)
     OPTIONAL MATCH (m)-[:hasCreator]->(a:Person)-[r:knows]-(p)
-    RETURN c.id AS commentId,
-        c.content AS commentContent,
-        c.creationDate AS commentCreationDate,
-        p.id AS replyAuthorId,
-        p.firstName AS replyAuthorFirstName,
-        p.lastName AS replyAuthorLastName,
-        CASE r
-            WHEN null THEN false
-            ELSE true
+    RETURN c.id AS commentId, c.content AS commentContent, c.creationDate AS commentCreationDate, p.id AS replyAuthorId, p.firstName AS replyAuthorFirstName, p.lastName AS replyAuthorLastName,
+        CASE r WHEN null THEN false ELSE true
         END AS replyAuthorKnowsOriginalMessageAuthor
     ORDER BY commentCreationDate DESC, replyAuthorId

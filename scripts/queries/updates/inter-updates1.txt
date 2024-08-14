@@ -1,5 +1,22 @@
 // Add a Person node, connected to the network by 4 possible edge types.
 
+/*
+placeId: 52
+personId: 43985348834100
+personFirstName: "Satoru"
+personLastName: "Gojo"
+gender: male
+birthday: 335318400000
+creationDate: 1612137600000
+locationIP: 192.168.0.100
+browserUsed: Chrome
+languages: jp:en
+emails: satorugojo@unalived.com
+tagIds: [7, 8, 10]
+studyAt: [[2208, 1999]]
+workAt: [[481, 2003]]
+*/
+
 MATCH (c:Place {id: $placeId})
 CREATE (p:Person {
     id: $personId,

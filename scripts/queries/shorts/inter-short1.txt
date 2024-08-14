@@ -1,15 +1,6 @@
 // Given a start Person with ID $personId, retrieve their first name, last name, birthday, IP address, browser, and city of residence
 
-/*
-:param personId: 10995116277794
-*/
-MATCH (n:Person {id: $personId })-[:IisLocatedIn]->(p:Place)
-RETURN
-    n.firstName AS firstName,
-    n.lastName AS lastName,
-    n.birthday AS birthday,
-    n.locationIP AS locationIP,
-    n.browserUsed AS browserUsed,
-    p.id AS cityId,
-    n.gender AS gender,
-    n.creationDate AS creationDate
+
+:param personId => 8796093023215;
+MATCH (n:Person {id: $personId })-[:isLocatedIn]->(p:Place)
+RETURN n.firstName AS firstName, n.lastName AS lastName, n.birthday AS birthday, n.locationIP AS locationIP, n.browserUsed AS browserUsed, p.id AS cityId, n.gender AS gender, n.creationDate AS creationDate;

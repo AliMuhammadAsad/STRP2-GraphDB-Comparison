@@ -1,0 +1,8 @@
+// Add a friendship edge (knows) between two Persons.
+
+person1Id: 43985348834100
+person2Id: 32985348833653
+creationDate8: 1612145600000
+
+MATCH (p1:Person {id: $person1Id}), (p2:Person {id: $person2Id})
+CREATE (p1)-[:knows {creationDate: $creationDate}]->(p2)

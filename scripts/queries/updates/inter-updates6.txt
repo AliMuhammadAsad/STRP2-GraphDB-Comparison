@@ -1,0 +1,30 @@
+// Add a Post node connected to the network by 4 possible edge types (hasCreator, containerOf, isLocatedIn, hasTag).
+
+authorPersonId: 43985348834100
+countryId: 52
+forumId6: 2099511644587
+postId6: 1030792154060
+creationDate6: 1612137600000
+locationIP6: 192.168.0.697
+browserUsed6: Chrome
+language6: jp:en
+content6: "I am a post content."
+imageFile6: "post-image.jpg"
+length6: 100
+tagIds6: [7, 8, 10]
+
+MATCH (author:Person {id: $authorPersonId}), (country:Place {id: $countryId}), (forum:Forum {id: $forumId6})
+CREATE (author)<-[:hasCreator]-(p:Post:Message {
+    id: $postId6,
+    creationDate: $creationDate6,
+    locationIP: $locationIP6,
+    browserUsed: $browserUsed6,
+    language: $language6,
+    content: CASE $content6 WHEN '' THEN NULL ELSE $content6 END,
+    imageFile: CASE $imageFile6 WHEN '' THEN NULL ELSE $imageFile6 END,
+    length: $length6
+  })<-[:containerOf]-(forum), (p)-[:isLocatedIn]->(country)
+WITH p
+UNWIND $tagIds6 AS tagId
+  MATCH (t:Tag {id: tagId})
+  CREATE (p)-[:hasTag]->(t)

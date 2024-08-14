@@ -1,0 +1,8 @@
+// Add a Forum membership edge (hasMember) to a Person
+
+forumId: 2099511644587
+personId: 43985348834100
+joinDate5: 1612137600000
+
+MATCH (f:Forum {id: $forumId}), (p:Person {id: $personId})
+CREATE (f)-[:hasMember {creationDate: $joinDate5}]->(p)

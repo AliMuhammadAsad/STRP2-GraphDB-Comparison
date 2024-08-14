@@ -1,10 +1,7 @@
 // Given a Message with ID $messageId, retrieve its author
 
 /*
-:param messageId: 206158431836
+:param messageId => 412317002578
 */
 MATCH (m:Message {id:  $messageId })-[:hasCreator]->(p:Person)
-RETURN
-    p.id AS personId,
-    p.firstName AS firstName,
-    p.lastName AS lastName
+RETURN p.id AS personId, p.firstName AS firstName, p.lastName AS lastName
