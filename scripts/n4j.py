@@ -43,8 +43,7 @@ drop_all = [
 
 queries = {
     "Load Organisation": '''CALL apoc.periodic.iterate('LOAD CSV WITH HEADERS FROM "file:///static/organisation_0_0.csv" AS row FIELDTERMINATOR "|" RETURN row','CREATE (o:Organisation {id: toInteger(row.id), type: row.type, name: row.name, url: row.url})',{batchSize: 1000, iterateList: true});''',
-    "Load Place": '''CALL apoc.periodic.iterate('LOAD CSV WITH HEADERS FROM "file:///static/place_0_0.csv" AS row FIELDTERMINATOR "|" RETURN row',
-    'CREATE (p:Place {id: toInteger(row.id), name: row.name, url: row.url, type: row.type})',{batchSize: 1000, iterateList: true});''',
+    "Load Place": '''CALL apoc.periodic.iterate('LOAD CSV WITH HEADERS FROM "file:///static/place_0_0.csv" AS row FIELDTERMINATOR "|" RETURN row','CREATE (p:Place {id: toInteger(row.id), name: row.name, url: row.url, type: row.type})',{batchSize: 1000, iterateList: true});''',
     "Load TagClass": '''CALL apoc.periodic.iterate('LOAD CSV WITH HEADERS FROM "file:///static/tagclass_0_0.csv" AS row FIELDTERMINATOR "|" RETURN row','CREATE (tc:TagClass {id: toInteger(row.id), name: row.name, url: row.url})',{batchSize: 1000, iterateList: true});''',
     "Load Tag": '''CALL apoc.periodic.iterate('LOAD CSV WITH HEADERS FROM "file:///static/tag_0_0.csv" AS row FIELDTERMINATOR "|" RETURN row','CREATE (t:Tag {id: toInteger(row.id), name: row.name, url: row.url})',{batchSize: 1000, iterateList: true});''',
     "Organisation Located In Place": '''CALL apoc.periodic.iterate('LOAD CSV WITH HEADERS FROM "file:///static/organisation_isLocatedIn_place_0_0.csv" AS row FIELDTERMINATOR "|" RETURN row','MATCH (o:Organisation {id: toInteger(row.`Organisation.id`)}), (p:Place {id: toInteger(row.`Place.id`)}) CREATE (o)-[:isLocatedIn]->(p)',{batchSize:1000, iterateList:true});''',
@@ -55,23 +54,10 @@ queries = {
     "Load Person": '''call apoc.periodic.iterate(
   'load csv with headers from "file:///dynamic/person_0_0.csv" as row fieldterminator "|" return row',
   'create (p:Person {id: toInteger(row.id), firstName: row.firstName, lastName: row.lastName, gender: row.gender, birthday: row.birthday, creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, language: row.language, email: row.email})',
-  {batchSize: 1000, iterateList: true}
-);''',
-  "Load Forum": '''call apoc.periodic.iterate(
-  'load csv with headers from "file:///dynamic/forum_0_0.csv" as row fieldterminator "|" return row',
-  'create (f:Forum {id: toInteger(row.id), title: row.title, creationDate: row.creationDate})',
-  {batchSize: 1000, iterateList: true}
-);''',
-    "Load Post": '''call apoc.periodic.iterate(
-  'load csv with headers from "file:///dynamic/post_0_0.csv" as row fieldterminator "|" return row',
-  'create (p:Post {id: toInteger(row.id), imageFile: case row.imageFile when "" then null else row.imageFile end, creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, language: row.language, content: row.content, length: toInteger(row.length)})',
-  {batchSize: 1000, iterateList: true}
-);''',
-    "Load Comment": '''call apoc.periodic.iterate(
-  'load csv with headers from "file:///dynamic/comment_0_0.csv" as row fieldterminator "|" return row',
-  'create (c:Comment {id: toInteger(row.id), creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, content: row.content, length: toInteger(row.length)})',
-  {batchSize: 1000, iterateList: true}
-);''',
+  {batchSize: 1000, iterateList: true});''',
+  "Load Forum": '''call apoc.periodic.iterate('load csv with headers from "file:///dynamic/forum_0_0.csv" as row fieldterminator "|" return row','create (f:Forum {id: toInteger(row.id), title: row.title, creationDate: row.creationDate})',{batchSize: 1000, iterateList: true});''',
+    "Load Post": '''call apoc.periodic.iterate('load csv with headers from "file:///dynamic/post_0_0.csv" as row fieldterminator "|" return row','create (p:Post {id: toInteger(row.id), imageFile: case row.imageFile when "" then null else row.imageFile end, creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, language: row.language, content: row.content, length: toInteger(row.length)})',{batchSize: 1000, iterateList: true});''',
+    "Load Comment": '''call apoc.periodic.iterate('load csv with headers from "file:///dynamic/comment_0_0.csv" as row fieldterminator "|" return row','create (c:Comment {id: toInteger(row.id), creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, content: row.content, length: toInteger(row.length)})',{batchSize: 1000, iterateList: true});''',
 "Forum has member Person": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/forum_hasMember_person_0_0.csv" as row fieldterminator "|" return row', 'match (f:Forum {id: toInteger(row.`Forum.id`)}), (p:Person {id: toInteger(row.`Person.id`)}) create (f)-[:hasMember {creationDate: row.joinDate}]->(p)', {batchSize: 1000, iterateList: true} );''',
     "Forum has moderator Person": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/forum_hasModerator_person_0_0.csv" as row fieldterminator "|" return row', 'match (f:Forum {id: toInteger(row.`Forum.id`)}), (p:Person {id: toInteger(row.`Person.id`)}) create (f)-[:hasModerator]->(p)', {batchSize: 1000, iterateList: true} );''',
     "Forum has Tag": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/forum_hasTag_tag_0_0.csv" as row fieldterminator "|" return row', 'match (f:Forum {id: toInteger(row.`Forum.id`)}), (t:Tag {id: toInteger(row.`Tag.id`)}) create (f)-[:hasTag]->(t)', {batchSize: 1000, iterateList: true} );''',
@@ -89,66 +75,43 @@ queries = {
     "Person Knows Person": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_knows_person_0_0.csv" as row fieldterminator "|" return row', 'match (p1:Person {id: toInteger(row.`Person1.id`)}), (p2:Person {id: toInteger(row.`Person2.id`)}) create (p1)-[:knows {creationDate: row.creationDate}]->(p2)', {batchSize: 1000, iterateList: true} );''',
     "Person has Interest Tag": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_hasInterest_tag_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (t:Tag {id: toInteger(row.`Tag.id`)}) create (p)-[:hasInterest]->(t)', {batchSize: 1000, iterateList: true} );''',
     "Person study at University": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_studyAt_organisation_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)}) create (p)-[:studyAt {classYear: toInteger(row.classYear)}]->(o)', {batchSize: 1000, iterateList: true} );''',
-    "Person Company": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_workAt_organisation_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)}) create (p)-[:workAt {workFrom: toInteger(row.workFrom)}]->(o)', {batchSize: 1000, iterateList: true} );''',
+    "Person works at Company": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_workAt_organisation_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)}) create (p)-[:workAt {workFrom: toInteger(row.workFrom)}]->(o)', {batchSize: 1000, iterateList: true} );''',
     "Person is Located In Place": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_isLocatedIn_place_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (pl:Place {id: toInteger(row.`Place.id`)}) create (p)-[:isLocatedIn]->(pl)', {batchSize: 1000, iterateList: true} );'''
 }
 
-load_static_nodes = {
-    "Load Organisation": '''CALL apoc.periodic.iterate('LOAD CSV WITH HEADERS FROM "file:///static/organisation_0_0.csv" AS row FIELDTERMINATOR "|" RETURN row','CREATE (o:Organisation {id: toInteger(row.id), type: row.type, name: row.name, url: row.url})',{batchSize: 1000, iterateList: true});''',
-    "Load Place": '''CALL apoc.periodic.iterate('LOAD CSV WITH HEADERS FROM "file:///static/place_0_0.csv" AS row FIELDTERMINATOR "|" RETURN row',
-    'CREATE (p:Place {id: toInteger(row.id), name: row.name, url: row.url, type: row.type})',{batchSize: 1000, iterateList: true});''',
-    "Load TagClass": '''CALL apoc.periodic.iterate('LOAD CSV WITH HEADERS FROM "file:///static/tagclass_0_0.csv" AS row FIELDTERMINATOR "|" RETURN row','CREATE (tc:TagClass {id: toInteger(row.id), name: row.name, url: row.url})',{batchSize: 1000, iterateList: true});''',
-    "Load Tag": '''CALL apoc.periodic.iterate('LOAD CSV WITH HEADERS FROM "file:///static/tag_0_0.csv" AS row FIELDTERMINATOR "|" RETURN row','CREATE (t:Tag {id: toInteger(row.id), name: row.name, url: row.url})',{batchSize: 1000, iterateList: true});'''
-}
-load_static_relationships = {
-    "Organisation Located In Place": '''CALL apoc.periodic.iterate('LOAD CSV WITH HEADERS FROM "file:///static/organisation_isLocatedIn_place_0_0.csv" AS row FIELDTERMINATOR "|" RETURN row','MATCH (o:Organisation {id: toInteger(row.`Organisation.id`)}), (p:Place {id: toInteger(row.`Place.id`)}) CREATE (o)-[:isLocatedIn]->(p)',{batchSize:1000, iterateList:true});''',
-    "Place is part of Place": '''CALL apoc.periodic.iterate('LOAD CSV WITH HEADERS FROM "file:///static/place_isPartOf_place_0_0.csv" AS row FIELDTERMINATOR "|" RETURN row','MATCH (p1:Place {id: toInteger(row.`Place1.id`)}), (p2:Place {id: toInteger(row.`Place2.id`)}) CREATE (p1)-[:isPartOf]->(p2)',{batchSize:1000, iterateList:true});''',
-    "Tag has type TagClass": '''CALL apoc.periodic.iterate('LOAD CSV WITH HEADERS FROM "file:///static/tag_hasType_tagclass_0_0.csv" AS row FIELDTERMINATOR "|" RETURN row','MATCH (t:Tag {id: toInteger(row.`Tag.id`)}), (tc:TagClass {id: toInteger(row.`TagClass.id`)}) CREATE (t)-[:hasType]->(tc)',{batchSize:1000, iterateList:true});''',
-    "TagClass is Subclass of TagClass": '''CALL apoc.periodic.iterate('LOAD CSV WITH HEADERS FROM "file:///static/tagclass_isSubclassOf_tagclass_0_0.csv" AS row FIELDTERMINATOR "|" RETURN row','MATCH (tc1:TagClass {id: toInteger(row.`TagClass1.id`)}), (tc2:TagClass {id: toInteger(row.`TagClass2.id`)}) CREATE (tc1)-[:isSubclassOf]->(tc2)',{batchSize:1000, iterateList:true});'''
-}
+queries_without_apoc = {
+    "Load Organisation": '''LOAD CSV WITH HEADERS FROM "file:///static/organisation_0_0.csv" AS row FIELDTERMINATOR "|" CREATE (o:Organisation {id: toInteger(row.id), type: row.type, name: row.name, url: row.url});''',
+    "Load Place": '''LOAD CSV WITH HEADERS FROM "file:///static/place_0_0.csv" AS row FIELDTERMINATOR "|" CREATE (p:Place {id: toInteger(row.id), name: row.name, url: row.url, type: row.type});''',
+    "Load TagClass": '''LOAD CSV WITH HEADERS FROM "file:///static/tagclass_0_0.csv" AS row FIELDTERMINATOR "|" CREATE (tc:TagClass {id: toInteger(row.id), name: row.name, url: row.url});''',
+    "Load Tag": '''LOAD CSV WITH HEADERS FROM "file:///static/tag_0_0.csv" AS row FIELDTERMINATOR "|" CREATE (t:Tag {id: toInteger(row.id), name: row.name, url: row.url});''',
+    "Organisation Located In Place": '''LOAD CSV WITH HEADERS FROM "file:///static/organisation_isLocatedIn_place_0_0.csv" AS row FIELDTERMINATOR "|" MATCH (o:Organisation {id: toInteger(row.`Organisation.id`)}), (p:Place {id: toInteger(row.`Place.id`)}) CREATE (o)-[:isLocatedIn]->(p);''',
+    "Place is part of Place": '''LOAD CSV WITH HEADERS FROM "file:///static/place_isPartOf_place_0_0.csv" AS row FIELDTERMINATOR "|" MATCH (p1:Place {id: toInteger(row.`Place1.id`)}), (p2:Place {id: toInteger(row.`Place2.id`)}) CREATE (p1)-[:isPartOf]->(p2);''',
+    "Tag has type TagClass": '''LOAD CSV WITH HEADERS FROM "file:///static/tag_hasType_tagclass_0_0.csv" AS row FIELDTERMINATOR "|" MATCH (t:Tag {id: toInteger(row.`Tag.id`)}), (tc:TagClass {id: toInteger(row.`TagClass.id`)}) CREATE (t)-[:hasType]->(tc);''',
+    "TagClass is Subclass of TagClass": '''LOAD CSV WITH HEADERS FROM "file:///static/tagclass_isSubclassOf_tagclass_0_0.csv" AS row FIELDTERMINATOR "|" MATCH (tc1:TagClass {id: toInteger(row.`TagClass1.id`)}), (tc2:TagClass {id: toInteger(row.`TagClass2.id`)}) CREATE (tc1)-[:isSubclassOf]->(tc2);''',
 
-load_dynamic_nodes = {
-  "Load Person": '''call apoc.periodic.iterate(
-  'load csv with headers from "file:///dynamic/person_0_0.csv" as row fieldterminator "|" return row',
-  'create (p:Person {id: toInteger(row.id), firstName: row.firstName, lastName: row.lastName, gender: row.gender, birthday: row.birthday, creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, language: row.language, email: row.email})',
-  {batchSize: 1000, iterateList: true}
-);''',
-  "Load Forum": '''call apoc.periodic.iterate(
-  'load csv with headers from "file:///dynamic/forum_0_0.csv" as row fieldterminator "|" return row',
-  'create (f:Forum {id: toInteger(row.id), title: row.title, creationDate: row.creationDate})',
-  {batchSize: 1000, iterateList: true}
-);''',
-    "Load Post": '''call apoc.periodic.iterate(
-  'load csv with headers from "file:///dynamic/post_0_0.csv" as row fieldterminator "|" return row',
-  'create (p:Post {id: toInteger(row.id), imageFile: case row.imageFile when "" then null else row.imageFile end, creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, language: row.language, content: row.content, length: toInteger(row.length)})',
-  {batchSize: 1000, iterateList: true}
-);''',
-    "Load Comment": '''call apoc.periodic.iterate(
-  'load csv with headers from "file:///dynamic/comment_0_0.csv" as row fieldterminator "|" return row',
-  'create (c:Comment {id: toInteger(row.id), creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, content: row.content, length: toInteger(row.length)})',
-  {batchSize: 1000, iterateList: true}
-);'''
-}
-load_dynamic_relationships = {
-    "Forum has member Person": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/forum_hasMember_person_0_0.csv" as row fieldterminator "|" return row', 'match (f:Forum {id: toInteger(row.`Forum.id`)}), (p:Person {id: toInteger(row.`Person.id`)}) create (f)-[:hasMember {creationDate: row.joinDate}]->(p)', {batchSize: 1000, iterateList: true} );''',
-    "Forum has moderator Person": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/forum_hasModerator_person_0_0.csv" as row fieldterminator "|" return row', 'match (f:Forum {id: toInteger(row.`Forum.id`)}), (p:Person {id: toInteger(row.`Person.id`)}) create (f)-[:hasModerator]->(p)', {batchSize: 1000, iterateList: true} );''',
-    "Forum has Tag": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/forum_hasTag_tag_0_0.csv" as row fieldterminator "|" return row', 'match (f:Forum {id: toInteger(row.`Forum.id`)}), (t:Tag {id: toInteger(row.`Tag.id`)}) create (f)-[:hasTag]->(t)', {batchSize: 1000, iterateList: true} );''',
-    "Forum container of Post": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/forum_containerOf_post_0_0.csv" as row fieldterminator "|" return row', 'match (f:Forum {id: toInteger(row.`Forum.id`)}), (p:Post {id: toInteger(row.`Post.id`)}) create (f)-[:containerOf]->(p)', {batchSize: 1000, iterateList: true} );''',
-    "Post has Tag": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/post_hasTag_tag_0_0.csv" as row fieldterminator "|" return row', 'match (p:Post {id: toInteger(row.`Post.id`)}), (t:Tag {id: toInteger(row.`Tag.id`)}) create (p)-[:hasTag]->(t)', {batchSize: 1000, iterateList: true} );''',
-    "Post is located in Place": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/post_isLocatedIn_place_0_0.csv" as row fieldterminator "|" return row', 'match (p:Post {id: toInteger(row.`Post.id`)}), (pl:Place {id: toInteger(row.`Place.id`)}) create (p)-[:isLocatedIn]->(pl)', {batchSize: 1000, iterateList: true} );''',
-    "Post has Creator Person": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/post_hasCreator_person_0_0.csv" as row fieldterminator "|" return row', 'match (p:Post {id: toInteger(row.`Post.id`)}), (pe:Person {id: toInteger(row.`Person.id`)}) create (p)-[:hasCreator]->(pe)', {batchSize: 1000, iterateList: true} );''',
-    "Comment has Tag": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/comment_hasTag_tag_0_0.csv" as row fieldterminator "|" return row', 'match (c:Comment {id: toInteger(row.`Comment.id`)}), (t:Tag {id: toInteger(row.`Tag.id`)}) create (c)-[:hasTag]->(t)', {batchSize: 1000, iterateList: true} );''',
-    "Comment is located in Place": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/comment_isLocatedIn_place_0_0.csv" as row fieldterminator "|" return row', 'match (c:Comment {id: toInteger(row.`Comment.id`)}), (p:Place {id: toInteger(row.`Place.id`)}) create (c)-[:isLocatedIn]->(p)', {batchSize: 1000, iterateList: true} );''',
-    "Comment is reply of Comment": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/comment_replyOf_comment_0_0.csv" as row fieldterminator "|" return row', 'match (c1:Comment {id: toInteger(row.`Comment1.id`)}), (c2:Comment {id: toInteger(row.`Comment2.id`)}) create (c1)-[:replyOf]->(c2)', {batchSize: 1000, iterateList: true} );''',
-    "Comment is reply of Post": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/comment_replyOf_post_0_0.csv" as row fieldterminator "|" return row', 'match (c:Comment {id: toInteger(row.`Comment.id`)}), (p:Post {id: toInteger(row.`Post.id`)}) create (c)-[:replyOfPost]->(p)', {batchSize: 1000, iterateList: true} );''',
-    "Comment has Creator Person": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/comment_hasCreator_person_0_0.csv" as row fieldterminator "|" return row', 'match (c:Comment {id: toInteger(row.`Comment.id`)}), (p:Person {id: toInteger(row.`Person.id`)}) create (c)-[:hasCreator]->(p)', {batchSize: 1000, iterateList: true} );''',
-    "Person Likes (Post)": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_likes_post_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (post:Post {id: toInteger(row.`Post.id`)}) create (p)-[:likes {creationDate: row.creationDate}]->(post)', {batchSize: 1000, iterateList: true} );''',
-    "Person Likes (Comment)": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_likes_comment_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (c:Comment {id: toInteger(row.`Comment.id`)}) create (p)-[:likes {creationDate: row.creationDate}]->(c)', {batchSize: 1000, iterateList: true} );''',
-    "Person Knows Person": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_knows_person_0_0.csv" as row fieldterminator "|" return row', 'match (p1:Person {id: toInteger(row.`Person1.id`)}), (p2:Person {id: toInteger(row.`Person2.id`)}) create (p1)-[:knows {creationDate: row.creationDate}]->(p2)', {batchSize: 1000, iterateList: true} );''',
-    "Person has Interest Tag": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_hasInterest_tag_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (t:Tag {id: toInteger(row.`Tag.id`)}) create (p)-[:hasInterest]->(t)', {batchSize: 1000, iterateList: true} );''',
-    "Person study at University": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_studyAt_organisation_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)}) create (p)-[:studyAt {classYear: toInteger(row.classYear)}]->(o)', {batchSize: 1000, iterateList: true} );''',
-    "Person Company": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_workAt_organisation_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)}) create (p)-[:workAt {workFrom: toInteger(row.workFrom)}]->(o)', {batchSize: 1000, iterateList: true} );''',
-    "Person is Located In Place": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_isLocatedIn_place_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (pl:Place {id: toInteger(row.`Place.id`)}) create (p)-[:isLocatedIn]->(pl)', {batchSize: 1000, iterateList: true} );'''
+    "Load Person": '''LOAD CSV WITH HEADERS FROM "file:///dynamic/person_0_0.csv" AS row FIELDTERMINATOR "|"  create (p:Person {id: toInteger(row.id), firstName: row.firstName, lastName: row.lastName, gender: row.gender, birthday: row.birthday, creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, language: row.language, email: row.email}) ;''',
+    "Load Forum": '''LOAD CSV WITH HEADERS FROM "file:///dynamic/forum_0_0.csv" AS row FIELDTERMINATOR "|"  create (f:Forum {id: toInteger(row.id), title: row.title, creationDate: row.creationDate});''',
+    "Load Post": '''LOAD CSV WITH HEADERS FROM "file:///dynamic/post_0_0.csv" AS row FIELDTERMINATOR "|"  create (p:Post {id: toInteger(row.id), imageFile: case row.imageFile when "" then null else row.imageFile end, creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, language: row.language, content: row.content, length: toInteger(row.length)});''',
+    "Load Comment": '''LOAD CSV WITH HEADERS FROM "file:///dynamic/comment_0_0.csv" AS row FIELDTERMINATOR "|"  create (c:Comment {id: toInteger(row.id), creationDate: row.creationDate, locationIP: row.locationIP, browserUsed: row.browserUsed, content: row.content, length: toInteger(row.length)});''',
+    "Forum has member Person": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/forum_hasMember_person_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (f:Forum {id: toInteger(row.`Forum.id`)}), (p:Person {id: toInteger(row.`Person.id`)}) CREATE (f)-[:hasMember {creationDate: row.joinDate}]->(p);''',
+    "Forum has moderator Person": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/forum_hasModerator_person_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (f:Forum {id: toInteger(row.`Forum.id`)}), (p:Person {id: toInteger(row.`Person.id`)}) CREATE (f)-[:hasModerator]->(p);''',
+    "Forum has Tag": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/forum_hasTag_tag_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (f:Forum {id: toInteger(row.`Forum.id`)}), (t:Tag {id: toInteger(row.`Tag.id`)}) CREATE (f)-[:hasTag]->(t);''',
+    "Forum container of Post": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/forum_containerOf_post_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (f:Forum {id: toInteger(row.`Forum.id`)}), (p:Post {id: toInteger(row.`Post.id`)}) CREATE (f)-[:containerOf]->(p);''',
+    "Post has Tag": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/post_hasTag_tag_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p:Post {id: toInteger(row.`Post.id`)}), (t:Tag {id: toInteger(row.`Tag.id`)}) CREATE (p)-[:hasTag]->(t);''',
+    "Post is located in Place": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/post_isLocatedIn_place_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p:Post {id: toInteger(row.`Post.id`)}), (pl:Place {id: toInteger(row.`Place.id`)}) CREATE (p)-[:isLocatedIn]->(pl);''',
+    "Post has Creator Person": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/post_hasCreator_person_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p:Post {id: toInteger(row.`Post.id`)}), (pe:Person {id: toInteger(row.`Person.id`)}) CREATE (p)-[:hasCreator]->(pe);''',
+    "Comment has Tag": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/comment_hasTag_tag_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (c:Comment {id: toInteger(row.`Comment.id`)}), (t:Tag {id: toInteger(row.`Tag.id`)}) CREATE (c)-[:hasTag]->(t);''',
+    "Comment is located in Place": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/comment_isLocatedIn_place_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (c:Comment {id: toInteger(row.`Comment.id`)}), (p:Place {id: toInteger(row.`Place.id`)}) CREATE (c)-[:isLocatedIn]->(p);''',
+    "Comment is reply of Comment": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/comment_replyOf_comment_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (c1:Comment {id: toInteger(row.`Comment1.id`)}), (c2:Comment {id: toInteger(row.`Comment2.id`)}) CREATE (c1)-[:replyOf]->(c2);''',
+    "Comment is reply of Post": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/comment_replyOf_post_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (c:Comment {id: toInteger(row.`Comment.id`)}), (p:Post {id: toInteger(row.`Post.id`)}) CREATE (c)-[:replyOfPost]->(p);''',
+    "Comment has Creator Person": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/comment_hasCreator_person_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (c:Comment {id: toInteger(row.`Comment.id`)}), (p:Person {id: toInteger(row.`Person.id`)}) CREATE (c)-[:hasCreator]->(p);''',
+    "Person Likes (Post)": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/person_likes_post_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p:Person {id: toInteger(row.`Person.id`)}), (post:Post {id: toInteger(row.`Post.id`)}) CREATE (p)-[:likes {creationDate: row.creationDate}]->(post);''',
+    "Person Likes (Comment)": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/person_likes_comment_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p:Person {id: toInteger(row.`Person.id`)}), (c:Comment {id: toInteger(row.`Comment.id`)}) CREATE (p)-[:likes {creationDate: row.creationDate}]->(c);''',
+    "Person Knows Person": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/person_knows_person_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p1:Person {id: toInteger(row.`Person1.id`)}), (p2:Person {id: toInteger(row.`Person2.id`)}) CREATE (p1)-[:knows {creationDate: row.creationDate}]->(p2);''',
+    "Person has Interest Tag": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/person_hasInterest_tag_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p:Person {id: toInteger(row.`Person.id`)}), (t:Tag {id: toInteger(row.`Tag.id`)}) CREATE (p)-[:hasInterest]->(t);''',
+    "Person study at University": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/person_studyAt_organisation_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)}) CREATE (p)-[:studyAt {classYear: toInteger(row.classYear)}]->(o);''',
+    "Person works at Company": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/person_workAt_organisation_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)}) CREATE (p)-[:workAt {workFrom: toInteger(row.workFrom)}]->(o);''',
+    "Person is Located In Place": '''using periodic commit 1000 LOAD CSV WITH HEADERS FROM "file:///dynamic/person_isLocatedIn_place_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p:Person {id: toInteger(row.`Person.id`)}), (pl:Place {id: toInteger(row.`Place.id`)}) CREATE (p)-[:isLocatedIn]->(pl);'''
 }
 
 print("#------------------------------------------------------------------#")
@@ -159,6 +122,7 @@ with driver.session() as session:
     rq(drop_all)
     rq(indexes)
     for q_name, q in queries.items():
+    # for q_name, q in queries_without_apoc.items():
         start_time = time.time()
         session.run(q)
         end_time = time.time()

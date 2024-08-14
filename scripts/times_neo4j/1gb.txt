@@ -30,7 +30,7 @@ Time taken to load Person Likes (Comment): 15937.04 ms
 Time taken to load Person Knows Person: 30848.13 ms
 Time taken to load Person has Interest Tag: 4224.64 ms
 Time taken to load Person study at University: 4726.87 ms
-Time taken to load Person Company: 281.44 ms
+Time taken to load Person works at Company: 281.44 ms
 Time taken to load Person is Located In Place: 527.50 ms
 
 

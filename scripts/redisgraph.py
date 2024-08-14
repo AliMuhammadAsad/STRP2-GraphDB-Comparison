@@ -5,7 +5,7 @@ import csv
 import time
 
 # Connect to a database
-r = redis.Redis(host="localhost", port=12000)
+r = redis.Redis(host="localhost", port=6380)
 
 
 # Define a graph called SocialMedia
@@ -113,68 +113,68 @@ def process_tagclass_issubclassof_tagclass_row(row):
 
 load_csv_to_redisgraph('../static/tagclass_isSubclassOf_tagclass_0_0.csv', '|', process_tagclass_issubclassof_tagclass_row)
 
-# # Load Person nodes
-# def process_person_row(row):
-#     properties = {
-#         'id': int(row['id']),
-#         'firstName': row['firstName'],
-#         'lastName': row['lastName'],
-#         'gender': row['gender'],
-#         'birthday': row['birthday'],
-#         'creationDate': row['creationDate'],
-#         'locationIP': row['locationIP'],
-#         'browserUsed': row['browserUsed'],
-#         'language': row['language'],
-#         'email': row['email']
-#     }
-#     node = create_node('Person', properties)
-#     nodes[(row['id'], 'Person')] = node
+# Load Person nodes
+def process_person_row(row):
+    properties = {
+        'id': int(row['id']),
+        'firstName': row['firstName'],
+        'lastName': row['lastName'],
+        'gender': row['gender'],
+        'birthday': row['birthday'],
+        'creationDate': row['creationDate'],
+        'locationIP': row['locationIP'],
+        'browserUsed': row['browserUsed'],
+        'language': row['language'],
+        'email': row['email']
+    }
+    node = create_node('Person', properties)
+    nodes[(row['id'], 'Person')] = node
 
-# load_csv_to_redisgraph('../dynamic/person_0_0.csv', '|', process_person_row)
+load_csv_to_redisgraph('../dynamic/person_0_0.csv', '|', process_person_row)
 
-# # Load Forum nodes
-# def process_forum_row(row):
-#     properties = {
-#         'id': int(row['id']),
-#         'title': row['title'],
-#         'creationDate': row['creationDate']
-#     }
-#     node = create_node('Forum', properties)
-#     nodes[(row['id'], 'Forum')] = node
+# Load Forum nodes
+def process_forum_row(row):
+    properties = {
+        'id': int(row['id']),
+        'title': row['title'],
+        'creationDate': row['creationDate']
+    }
+    node = create_node('Forum', properties)
+    nodes[(row['id'], 'Forum')] = node
 
-# load_csv_to_redisgraph('../dynamic/forum_0_0.csv', '|', process_forum_row)
+load_csv_to_redisgraph('../dynamic/forum_0_0.csv', '|', process_forum_row)
 
-# # Load Post nodes
-# def process_post_row(row):
-#     properties = {
-#         'id': int(row['id']),
-#         'imageFile': row['imageFile'] if row['imageFile'] else None,
-#         'creationDate': row['creationDate'],
-#         'locationIP': row['locationIP'],
-#         'browserUsed': row['browserUsed'],
-#         'language': row['language'],
-#         'content': row['content'],
-#         'length': int(row['length'])
-#     }
-#     node = create_node('Post', properties)
-#     nodes[(row['id'], 'Post')] = node
+# Load Post nodes
+def process_post_row(row):
+    properties = {
+        'id': int(row['id']),
+        'imageFile': row['imageFile'] if row['imageFile'] else None,
+        'creationDate': row['creationDate'],
+        'locationIP': row['locationIP'],
+        'browserUsed': row['browserUsed'],
+        'language': row['language'],
+        'content': row['content'],
+        'length': int(row['length'])
+    }
+    node = create_node('Post', properties)
+    nodes[(row['id'], 'Post')] = node
 
-# load_csv_to_redisgraph('../dynamic/post_0_0.csv', '|', process_post_row)
+load_csv_to_redisgraph('../dynamic/post_0_0.csv', '|', process_post_row)
 
-# # Load Comment nodes
-# def process_comment_row(row):
-#     properties = {
-#         'id': int(row['id']),
-#         'creationDate': row['creationDate'],
-#         'locationIP': row['locationIP'],
-#         'browserUsed': row['browserUsed'],
-#         'content': row['content'],
-#         'length': int(row['length'])
-#     }
-#     node = create_node('Comment', properties)
-#     nodes[(row['id'], 'Comment')] = node
+# Load Comment nodes
+def process_comment_row(row):
+    properties = {
+        'id': int(row['id']),
+        'creationDate': row['creationDate'],
+        'locationIP': row['locationIP'],
+        'browserUsed': row['browserUsed'],
+        'content': row['content'],
+        'length': int(row['length'])
+    }
+    node = create_node('Comment', properties)
+    nodes[(row['id'], 'Comment')] = node
 
-# load_csv_to_redisgraph('../dynamic/comment_0_0.csv', '|', process_comment_row)
+load_csv_to_redisgraph('../dynamic/comment_0_0.csv', '|', process_comment_row)
 
 # # Load Forum hasMember Person relationships
 # def process_forum_has_member_row(row):
