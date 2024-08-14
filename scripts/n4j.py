@@ -76,7 +76,9 @@ queries = {
     "Person has Interest Tag": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_hasInterest_tag_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (t:Tag {id: toInteger(row.`Tag.id`)}) create (p)-[:hasInterest]->(t)', {batchSize: 1000, iterateList: true} );''',
     "Person study at University": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_studyAt_organisation_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)}) create (p)-[:studyAt {classYear: toInteger(row.classYear)}]->(o)', {batchSize: 1000, iterateList: true} );''',
     "Person works at Company": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_workAt_organisation_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)}) create (p)-[:workAt {workFrom: toInteger(row.workFrom)}]->(o)', {batchSize: 1000, iterateList: true} );''',
-    "Person is Located In Place": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_isLocatedIn_place_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (pl:Place {id: toInteger(row.`Place.id`)}) create (p)-[:isLocatedIn]->(pl)', {batchSize: 1000, iterateList: true} );'''
+    "Person is Located In Place": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_isLocatedIn_place_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (pl:Place {id: toInteger(row.`Place.id`)}) create (p)-[:isLocatedIn]->(pl)', {batchSize: 1000, iterateList: true} );''', 
+    "Set Post as Message": '''match (p:Post) set p:Message''',
+    "Set Comment as Message": '''match (c:Comment) set c:Message'''
 }
 
 queries_without_apoc = {
@@ -112,8 +114,8 @@ queries_without_apoc = {
     "Person study at University": '''LOAD CSV WITH HEADERS FROM "file:///dynamic/person_studyAt_organisation_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)}) CREATE (p)-[:studyAt {classYear: toInteger(row.classYear)}]->(o);''',
     "Person works at Company": '''LOAD CSV WITH HEADERS FROM "file:///dynamic/person_workAt_organisation_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)}) CREATE (p)-[:workAt {workFrom: toInteger(row.workFrom)}]->(o);''',
     "Person is Located In Place": '''LOAD CSV WITH HEADERS FROM "file:///dynamic/person_isLocatedIn_place_0_0.csv" AS row FIELDTERMINATOR "|"  MATCH (p:Person {id: toInteger(row.`Person.id`)}), (pl:Place {id: toInteger(row.`Place.id`)}) CREATE (p)-[:isLocatedIn]->(pl);''',
-    "Set Post as Message": '''match (p:Post) set m:Message''',
-    "Set Comment as Message": '''match (c:Comment) set m:Message'''
+    "Set Post as Message": '''match (p:Post) set p:Message''',
+    "Set Comment as Message": '''match (c:Comment) set c:Message'''
 }
 
 print("#------------------------------------------------------------------#")
