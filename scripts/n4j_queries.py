@@ -75,7 +75,11 @@ params = {
 # }
 
 # Params for Interactive Complex - Comment all others if running Interactive Complex
-# params = {}
+# params = {
+#   # Compelex 1
+#   "personId": 35184372089012,
+#   "firstName": "Jose",
+# }
 
 i_shorts = {
     "Interactive Short 1" : '''MATCH (n:Person {id: $personId })-[:isLocatedIn]->(p:Place)
