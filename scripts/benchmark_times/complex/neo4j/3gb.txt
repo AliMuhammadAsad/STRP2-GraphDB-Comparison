@@ -1,0 +1,27 @@
+#---------------------------------------------------------------------------#
+#---------------Benchmarking Queries: Interactive Complex-----------------#
+#---------------------------------------------------------------------------#
+Time taken to run Interactive Complex 1: 5.39 ms
+Time taken to run Interactive Complex 2: 727.09 ms
+Time taken to run Interactive Complex 3: 66.59 ms
+Time taken to run Interactive Complex 4: 6341.39 ms
+Time taken to run Interactive Complex 5: 57.80 ms
+Time taken to run Interactive Complex 6: 2264.59 ms
+Time taken to run Interactive Complex 7: 2745.02 ms
+Time taken to run Interactive Complex 8: 6.16 ms
+Time taken to run Interactive Complex 9: 4.33 ms
+Time taken to run Interactive Complex 10: 3422.86 ms
+Time taken to run Interactive Complex 11: 357.18 ms
+Time taken to run Interactive Complex 12: 23.25 ms
+Time taken to run Interactive Complex 13: 315.83 ms
+Time taken to run Interactive Complex 14: 2.17 ms
+
+
+#---------------------------------------------------------------------------#
+#------------------------------ Execution Times ----------------------------#
+#---------------------------------------------------------------------------#
+Fastest Query: Interactive Complex 14 with 2.17 ms
+Slowest Query: Interactive Complex 4 with 6341.39 ms
+Total time taken: 16339.64 ms
+Average time taken: 1167.12 ms
+#---------------------------------------------------------------------------#
