@@ -1,0 +1,30 @@
+// Given a start Person with ID $personId, denote their friends and friends of friends (excluding the start Person) as otherPerson. Find Forums that any Person otherPerson became a member of after a given date ($minDate). For each of those Forums, count the number of Posts that were created by the Person otherPerson.
+
+/*
+personId1: 8796093023522
+minDate: "0"
+*/
+
+MATCH (person:Person {id: $personId1})-[:knows*1..2]-(friend)
+WHERE
+    NOT person=friend
+WITH DISTINCT friend
+MATCH (friend)<-[membership:hasMember]-(forum)
+WHERE
+    membership.creationDate > $minDate
+WITH
+    forum,
+    collect(friend) AS friends
+OPTIONAL MATCH (friend)<-[:hasCreator]-(post)<-[:containerOf]-(forum)
+WHERE
+    friend IN friends
+WITH
+    forum,
+    count(post) AS postCount
+RETURN
+    forum.title AS forumName,
+    postCount
+ORDER BY
+    postCount DESC,
+    forum.id ASC
+LIMIT 20

@@ -1,0 +1,19 @@
+// Given a start Person with ID $personId, find the most recent Messages from all of that Person’s friends (friend nodes). Only consider Messages created before the given $maxDate (excluding that day).
+
+/*
+personId1:  8796093023522
+maxDate:  "1347528281121"
+*/
+MATCH (:Person {id: $personId1})-[:knows]-(friend:Person)<-[:hasCreator]-(message:Message)
+    WHERE message.creationDate <= $maxDate
+    RETURN
+        friend.id AS personId,
+        friend.firstName AS personFirstName,
+        friend.lastName AS personLastName,
+        message.id AS postOrCommentId,
+        coalesce(message.content,message.imageFile) AS postOrCommentContent,
+        message.creationDate AS postOrCommentCreationDate
+    ORDER BY
+        postOrCommentCreationDate DESC,
+        toInteger(postOrCommentId) ASC
+    LIMIT 20

@@ -1,0 +1,24 @@
+// Given a start Person with ID $personId, find Tags that are attached to Posts that were created by that Person’s friends. Only include Tags that were attached to friends’ Posts created within a given time interval [$startDate, $startDate + $durationDays) (closed-open) and that were never attached to friends’ Posts created before this interval
+
+/*
+personId1: 8796093023522
+startDate: "0"
+endDate: "1347528281121"
+*/
+MATCH (person:Person {id: $personId1})-[:knows]-(friend:Person),
+      (friend)<-[:hasCreator]-(post:Post)-[:hasTag]->(tag)
+WITH DISTINCT tag, post
+WITH tag,
+     CASE
+       WHEN $startDate <= post.creationDate < $endDate THEN 1
+       ELSE 0
+     END AS valid,
+     CASE
+       WHEN post.creationDate < $startDate THEN 1
+       ELSE 0
+     END AS inValid
+WITH tag, sum(valid) AS postCount, sum(inValid) AS inValidPostCount
+WHERE postCount>0 AND inValidPostCount=0
+RETURN tag.name AS tagName, postCount
+ORDER BY postCount DESC, tagName ASC
+LIMIT 10

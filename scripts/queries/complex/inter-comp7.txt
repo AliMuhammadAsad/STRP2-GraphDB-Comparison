@@ -1,0 +1,23 @@
+// Given a start Person with ID $personId, find the most recent likes on any of start Person’s Messages. Find Persons that liked (likes edge) any of start Person’s Messages, the Messages they liked most recently, the creation date of that like, and the latency in minutes (minutesLatency) between creation of Messages and like. Additionally, for each Person found return a flag indicating (isNew) whether the liker is a friend of start Person. In case that a Person liked multiple Messages at the same time, return the Message with lowest identifier. Validation rule: Depending on whether the system-under-test supports leap seconds or uses UTC-SLS (UTC with Smoothed Leap Seconds), a difference of 1 minute can occur between the minutesLatency results of two correct implementations when the time interval includes June 30, 2012, when there was a leap second. Therefore, the minutesLatency value is validated using a tolerance of 1 minute.
+
+
+/*
+personId1: 8796093023522
+*/
+MATCH (person:Person {id: $personId1})<-[:hasCreator]-(message:Message)<-[like:likes]-(liker:Person)
+    WITH liker, message, like.creationDate AS likeTime, person
+    ORDER BY likeTime DESC, toInteger(message.id) ASC
+    WITH liker, head(collect({msg: message, likeTime: likeTime})) AS latestLike, person
+RETURN
+    liker.id AS personId,
+    liker.firstName AS personFirstName,
+    liker.lastName AS personLastName,
+    latestLike.likeTime AS likeCreationDate,
+    latestLike.msg.id AS commentOrPostId,
+    coalesce(latestLike.msg.content, latestLike.msg.imageFile) AS commentOrPostContent,
+    toInteger(floor(toFloat(toInteger(latestLike.likeTime) - toInteger(latestLike.msg.creationDate))/1000.0)/60.0) AS minutesLatency,
+    not((liker)-[:knows]-(person)) AS isNew
+ORDER BY
+    likeCreationDate DESC,
+    toInteger(personId) ASC
+LIMIT 20
