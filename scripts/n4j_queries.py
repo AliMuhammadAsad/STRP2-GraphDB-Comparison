@@ -11,6 +11,7 @@ driver = GDB.driver(URI, auth=AUTH)
 #     "personId" : 8796093023215,
 #     "messageId" : 412317002578,
 # }
+
 # Params for Interactive Updates - Comment all others if running Interactive Updates
 params = {
     # Interactive Updates
@@ -500,8 +501,8 @@ highest = 0; highest_name = ""
 query_count = 0 
 
 print("#---------------------------------------------------------------------------#")
-# print("#---------------- Benchmarking Queries: Interactive Update -----------------#")
-print("#---------------Benchmarking Queries: Interactive Complex-----------------#")
+print("#---------------- Benchmarking Queries: Interactive Update -----------------#")
+# print("#---------------Benchmarking Queries: Interactive Complex-----------------#")
 # print("#---------------- Benchmarking Queries: Interactive Shorts -----------------#")
 print("#---------------------------------------------------------------------------#")
 
