@@ -77,8 +77,9 @@ queries = {
     "Person study at University": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_studyAt_organisation_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)}) create (p)-[:studyAt {classYear: toInteger(row.classYear)}]->(o)', {batchSize: 1000, iterateList: true} );''',
     "Person works at Company": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_workAt_organisation_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (o:Organisation {id: toInteger(row.`Organisation.id`)}) create (p)-[:workAt {workFrom: toInteger(row.workFrom)}]->(o)', {batchSize: 1000, iterateList: true} );''',
     "Person is Located In Place": '''call apoc.periodic.iterate( 'load csv with headers from "file:///dynamic/person_isLocatedIn_place_0_0.csv" as row fieldterminator "|" return row', 'match (p:Person {id: toInteger(row.`Person.id`)}), (pl:Place {id: toInteger(row.`Place.id`)}) create (p)-[:isLocatedIn]->(pl)', {batchSize: 1000, iterateList: true} );''', 
-    "Set Post as Message": '''match (p:Post) set p:Message''',
-    "Set Comment as Message": '''match (c:Comment) set c:Message'''
+    # "Set Post as Message": '''match (p:Post) set p:Message''',
+    # "Set Comment as Message": '''match (c:Comment) set c:Message'''
+    "Set Comment and Post as Message": '''call apoc.periodic.iterate('match (n) where n:Post or n:Comment return n', 'set n:Message', {batchSize:1000, iterateList:true})'''
 }
 
 queries_without_apoc = {
@@ -126,8 +127,8 @@ total_time = 0
 with driver.session() as session:
     rq(drop_all)
     rq(indexes)
-    # for q_name, q in queries.items():
-    for q_name, q in queries_without_apoc.items():
+    for q_name, q in queries.items():
+    # for q_name, q in queries_without_apoc.items():
         start_time = time.time()
         session.run(q)
         end_time = time.time()
@@ -142,6 +143,8 @@ print("#------------------------------------------------------------------#")
 print(f"Time taken to load dataset: {(total_time) * 1000:.2f} ms")
 # Printing time in seconds:
 print(f"Time taken to load dataset: {total_time:.2f} s")
+# Printing time in minutes:
+print(f"Time taken to load dataset: {(total_time) / 60:.2f} min")
 # Printing time in hours:
 print(f"Time taken to load dataset: {(total_time) / 3600:.2f} h")
 print("#------------------------------------------------------------------#")
