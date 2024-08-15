@@ -41,3 +41,54 @@ Time taken to load dataset: 1184310.54 ms
 Time taken to load dataset: 1184.31 s
 Time taken to load dataset: 0.33 h
 #------------------------------------------------------------------#
+
+
+
+
+
+// Some time that randomly came
+#------------------------------------------------------------------#
+#---------------- Individual Query Execution Time -----------------#
+#------------------------------------------------------------------#
+Time taken to load Load Organisation: 332.93 ms
+Time taken to load Load Place: 487.80 ms
+Time taken to load Load TagClass: 112.91 ms
+Time taken to load Load Tag: 68.87 ms
+Time taken to load Organisation Located In Place: 412.13 ms
+Time taken to load Place is part of Place: 395.33 ms
+Time taken to load Tag has type TagClass: 123.89 ms
+Time taken to load TagClass is Subclass of TagClass: 464.69 ms
+Time taken to load Load Person: 104.08 ms
+Time taken to load Load Forum: 795.81 ms
+Time taken to load Load Post: 3411.55 ms
+Time taken to load Load Comment: 52265.58 ms
+Time taken to load Forum has member Person: 114334.98 ms
+Time taken to load Forum has moderator Person: 103009.80 ms
+Time taken to load Forum has Tag: 4513.71 ms
+Time taken to load Forum container of Post: 16333.99 ms
+Time taken to load Post has Tag: 47353.13 ms
+Time taken to load Post is located in Place: 44921.11 ms
+Time taken to load Post has Creator Person: 45880.47 ms
+Time taken to load Comment has Tag: 47766.65 ms
+Time taken to load Comment is located in Place: 174422.54 ms
+Time taken to load Comment is reply of Comment: 16334.65 ms
+Time taken to load Comment is reply of Post: 8388.08 ms
+Time taken to load Comment has Creator Person: 61219.78 ms
+Time taken to load Person Likes (Post): 16603.30 ms
+Time taken to load Person Likes (Comment): 55218.86 ms
+Time taken to load Person Knows Person: 119122.04 ms
+Time taken to load Person has Interest Tag: 13723.69 ms
+Time taken to load Person study at University: 12211.86 ms
+Time taken to load Person works at Company: 571.80 ms
+Time taken to load Person is Located In Place: 1284.10 ms
+Time taken to load Set Comment and Post as Message: 652.55 ms
+
+
+#------------------------------------------------------------------#
+#------------------------ Total Execution Time --------------------#
+#------------------------------------------------------------------#
+Time taken to load dataset: 962842.65 ms
+Time taken to load dataset: 962.84 s
+Time taken to load dataset: 16.05 min
+Time taken to load dataset: 0.27 h
+#------------------------------------------------------------------#
