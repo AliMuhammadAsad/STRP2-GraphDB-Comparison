@@ -5,6 +5,8 @@ import time
 URI = "bolt://localhost:7687"
 AUTH = ("", "")
 
+total_time=0
+
 queries = {
     "Load Organisation": '''
     LOAD CSV FROM '/usr/lib/memgraph/organisation_0_0.csv' WITH HEADER DELIMITER '|' AS row
@@ -155,32 +157,78 @@ queries = {
     '''
 }
 
+indexes =[
+'CREATE INDEX ON :Organisation(id);',
+'CREATE INDEX ON :Place(id);',
+'CREATE INDEX ON :TagClass(id);',
+'CREATE INDEX ON :Tag(id);',
+'CREATE INDEX ON :Person(id);',
+'CREATE INDEX ON :Forum(id);',
+'CREATE INDEX ON :Post(id);',
+'CREATE INDEX ON :Comment(id);'
+]
+drop_all =[
+'match (n) detach delete (n);',
+'DROP INDEX ON :Organisation(id);',
+'DROP INDEX ON :Place(id);',
+'DROP INDEX ON :TagClass(id);',
+'DROP INDEX ON :Tag(id);',
+'DROP INDEX ON :Person(id);',
+'DROP INDEX ON :Forum(id);',
+'DROP INDEX ON :Post(id);',
+'DROP INDEX ON :Comment(id);'
+]
 
 total_time=0
 
+print("#------------------------------------------------------------------#")
+print("#---------------- Individual Query Execution Time -----------------#")
+print("#------------------------------------------------------------------#")
 with GraphDatabase.driver(URI, auth=AUTH) as client:
     # Check the connection
     client.verify_connectivity()
-
-
-    for query_name, query in queries.items():
-        # Measure the time for each query
+    # for d in drop_all:
+    #     client.execute_query(d)
+    # for ci in indexes:
+    #     client.execute_query(ci)
+    for q_name, q in queries.items():
         start_time = time.time()
-        try:
-            # Execute the query
-            client.execute_query(query)
-            # Calculate execution time
-            end_time = time.time()
-            execution_time = end_time - start_time
-            print(f"Query '{query_name}' Execution Time: {execution_time:.4f} seconds")
-            total_time += execution_time
+        client.execute_query(q)
+        end_time = time.time()
+        execution_time = end_time - start_time
+        print(f"Time taken to load {q_name}: {execution_time * 1000:.2f} ms")
+        total_time += execution_time
 
-        except Exception as e:
-            print(f"Error executing query '{query_name}': {e}")
-            print("Aborting and clearing the graph...")
-            client.execute_query("MATCH (n) DETACH DELETE n")
-            break
+    # for query_name, query in queries.items():
+    #     # Measure the time for each query
+    #     start_time = time.time()
+    #     try:
+    #         # Execute the query
+    #         client.execute_query(query)
+    #         # Calculate execution time
+    #         end_time = time.time()
+    #         execution_time = end_time - start_time
+    #         print(f"Query '{query_name}' Execution Time: {execution_time:.4f} seconds")
+    #         total_time += execution_time
+
+    #     except Exception as e:
+    #         print(f"Error executing query '{query_name}': {e}")
+    #         print("Aborting and clearing the graph...")
+    #         client.execute_query("MATCH (n) DETACH DELETE n")
+    #         break
+
+print("\n")
+print("#------------------------------------------------------------------#")
+print("#------------------------ Total Execution Time --------------------#")
+print("#------------------------------------------------------------------#")
+# Printing time in milliseconds:
+print(f"Time taken to load dataset: {(total_time) * 1000:.2f} ms")
+# Printing time in seconds:
+print(f"Time taken to load dataset: {total_time:.2f} s")
+# Printing time in hours:
+print(f"Time taken to load dataset: {(total_time) / 3600:.2f} h")
+print("#------------------------------------------------------------------#")
 
 
-    client.close()
-    print("Total time taken", total_time)
+client.close()
+# print("Total time taken", total_time)

@@ -1,0 +1,21 @@
+#---------------------------------------------------------------------------#
+#---------------- Benchmarking Queries: Interactive Update -----------------#
+#---------------------------------------------------------------------------#
+Time taken to run Interactive Update 1: 95.54 ms
+Time taken to run Interactive Update 2: 45.65 ms
+Time taken to run Interactive Update 3: 28.51 ms
+Time taken to run Interactive Update 4: 44.19 ms
+Time taken to run Interactive Update 5: 31.36 ms
+Time taken to run Interactive Update 6: 84.76 ms
+Time taken to run Interactive Update 7: 133.38 ms
+Time taken to run Interactive Update 8: 29.96 ms
+
+
+#---------------------------------------------------------------------------#
+#------------------------------ Execution Times ----------------------------#
+#---------------------------------------------------------------------------#
+Fastest Query: Interactive Update 3 with 28.51 ms
+Slowest Query: Interactive Update 7 with 133.38 ms
+Total time taken: 493.34 ms
+Average time taken: 61.67 ms
+#---------------------------------------------------------------------------#

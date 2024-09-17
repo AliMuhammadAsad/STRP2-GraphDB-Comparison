@@ -1,0 +1,20 @@
+#---------------------------------------------------------------------------#
+#---------------- Benchmarking Queries: Interactive Shorts -----------------#
+#---------------------------------------------------------------------------#
+Time taken to run Interactive Short 1: 6.39 ms
+Time taken to run Interactive Short 2: 2.90 ms
+Time taken to run Interactive Short 3: 5.50 ms
+Time taken to run Interactive Short 4: 6.90 ms
+Time taken to run Interactive Short 5: 1409.24 ms
+Time taken to run Interactive Short 6: 1408.29 ms
+Time taken to run Interactive Short 7: 1414.99 ms
+
+
+#---------------------------------------------------------------------------#
+#------------------------------ Execution Times ----------------------------#
+#---------------------------------------------------------------------------#
+Fastest Query: Interactive Short 2 with 2.90 ms
+Slowest Query: Interactive Short 7 with 1414.99 ms
+Total time taken: 4254.21 ms
+Average time taken: 607.74 ms
+#---------------------------------------------------------------------------#

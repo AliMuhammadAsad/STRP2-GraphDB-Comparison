@@ -1,0 +1,18 @@
+// Given two Persons with IDs $person1Id and $person2Id, find the shortest path between these two Persons in the subgraph induced by the knows edges. Return the length of this path:
+• −1: no path found
+• 0: start person = end person
+• > 0: path found (start person ≠ end person)
+
+/*
+person1Id13: 8796093023522
+person2Id13: 19791209300796
+*/
+MATCH
+    (person1:Person {id: $person1Id13}),
+    (person2:Person {id: $person2Id13}),
+    path = shortestPath((person1)-[:knows*]-(person2))
+RETURN
+    CASE path IS NULL
+        WHEN true THEN -1
+        ELSE length(path)
+    END AS shortestPathLength

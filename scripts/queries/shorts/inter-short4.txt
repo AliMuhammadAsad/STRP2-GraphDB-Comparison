@@ -1,0 +1,7 @@
+// Given a Message with ID $messageId, retrieve its content and creation date.
+
+/*
+:param messageId => 412317002578
+*/
+MATCH (m:Message {id:  $messageId })
+RETURN m.creationDate as messageCreationDate, coalesce(m.content, m.imageFile) as messageContent

@@ -1,0 +1,15 @@
+// Add a Forum node, connected to the network by 2 possible edge types.
+
+moderatorPersonId: 933
+forumId: 2099511644587
+forumTitle: InteractiveUpdate4Form
+creationDate: 1612137600000
+tagIds: [2875]
+
+
+MATCH (p:Person {id: $moderatorPersonId})
+CREATE (f:Forum {id: $forumId, title: $forumTitle, creationDate: $creationDate})-[:hasModerator]->(p)
+WITH f
+UNWIND $tagIds AS tagId
+  MATCH (t:Tag {id: tagId})
+  CREATE (f)-[:hasTag]->(t)

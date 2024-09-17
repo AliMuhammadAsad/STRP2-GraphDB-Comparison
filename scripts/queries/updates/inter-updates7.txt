@@ -1,0 +1,31 @@
+// Add a Comment node replying to a Post/Comment, connected to the network by 4 possible edge types (replyOf, hasCreator, isLocatedIn, hasTag)
+
+authorPersonId7: 43985348834100
+countryId7: 52
+replyToPostId7: 1030792154060
+replyToCommentId7: 1030792154061
+commentId7: 1030792154062
+creationDate7: 1612137600000
+locationIP7: 192.168.0.697
+browserUsed7: Chrome
+content7: "I am a comment content for interactive update 7."
+length7: 100
+tagIds7: [11, 12, 13]
+
+MATCH
+  (author:Person {id: $authorPersonId7}),
+  (country:Place {id: $countryId7}),
+  (message:Message {id: $replyToPostId7 + $replyToCommentId7 + 1}) // $replyToCommentId is -1 if the message is a reply to a post and vica versa (see spec)
+CREATE (author)<-[:hasCreator]-(c:Comment:Message {
+    id: $commentId7,
+    creationDate: $creationDate7,
+    locationIP: $locationIP7,
+    browserUsed: $browserUsed7,
+    content: $content7,
+    length: $length7
+  })-[:replyOf]->(message),
+  (c)-[:isLocatedIn]->(country)
+WITH c
+UNWIND $tagIds7 AS tagId
+  MATCH (t:Tag {id: tagId})
+  CREATE (c)-[:hasTag]->(t)
